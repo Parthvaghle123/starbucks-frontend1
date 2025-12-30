@@ -40,7 +40,7 @@ const Item = () => {
         const sortedProducts = response.data.sort((a, b) => {
           const dateA = new Date(a.createdAt || a._id);
           const dateB = new Date(b.createdAt || b._id);
-          return dateB - dateA;
+          return dateA- dateB;
         });
 
         setProducts(sortedProducts);
