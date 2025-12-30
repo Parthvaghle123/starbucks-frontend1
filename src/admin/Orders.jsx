@@ -95,14 +95,12 @@ const Orders = () => {
     }
   };
 
-  if (loading) {
+ if (loading) {
     return (
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{ height: "50vh" }}
-      >
-        <div className="spinner-border text-success" role="status">
-          <span className="visually-hidden ">Loading...</span>
+      <div className="dashboard-root">
+        <div className="loading">
+          <Activity className="animate-spin" size={24} />
+          <span style={{ marginLeft: '0.5rem' }}>Loading Order...</span>
         </div>
       </div>
     );
