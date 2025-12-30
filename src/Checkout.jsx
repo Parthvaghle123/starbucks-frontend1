@@ -26,7 +26,7 @@ const Check = () => {
       if (!token) return;
 
       try {
-        const res = await axios.get("https://starbucks-backend-r1ke.onrender.com/user/profile1", {
+        const res = await axios.get("https://starbucks-backend1.onrender.com/user/profile1", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setFormData((prev) => ({
@@ -133,7 +133,7 @@ const placeOrder = async (e) => {
       cardNumber: rawCardNumber,
     };
 
-    await axios.post("https://starbucks-backend-r1ke.onrender.com/order", payload, {
+    await axios.post("https://starbucks-backend1.onrender.com/order", payload, {
       headers: { Authorization: `Bearer ${token}` },
     });
 

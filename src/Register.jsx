@@ -127,7 +127,7 @@ const Register = () => {
     if (!validateForm()) return; // ❌ stop if validation fails
 
     axios
-      .post("https://starbucks-backend-r1ke.onrender.com/register", {
+      .post("https://starbucks-backend1.onrender.com/register", {
         ...form,
         password: password,
       })

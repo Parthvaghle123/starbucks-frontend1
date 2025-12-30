@@ -21,7 +21,7 @@ const Dashboard = () => {
           return;
         }
 
-        const response = await axios.get('https://starbucks-backend-r1ke.onrender.com/api/admin/stats', {
+        const response = await axios.get('https://starbucks-backend1.onrender.com/api/admin/stats', {
           headers: { Authorization: `Bearer ${token}` },
         });
 

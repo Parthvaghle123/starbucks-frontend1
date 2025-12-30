@@ -67,7 +67,7 @@ const Item = () => {
 
     try {
       await axios.post(
-        "https://starbucks-backend-r1ke.onrender.com/add-to-cart",
+        "https://starbucks-backend1.onrender.com/add-to-cart",
         {
           productId: product.id.toString(),
           image: product.image,

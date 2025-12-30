@@ -29,7 +29,7 @@ const ChangePasswordOTP = () => {
     setLoading(true);
     
     try {
-      const res = await axios.post("https://starbucks-backend-r1ke.onrender.com/verify-email-send-otp", {
+      const res = await axios.post("https://starbucks-backend1.onrender.com/verify-email-send-otp", {
         email: email.toLowerCase(),
       });
 
@@ -57,7 +57,7 @@ const ChangePasswordOTP = () => {
     setLoading(true);
     
     try {
-      const res = await axios.post("https://starbucks-backend-r1ke.onrender.com/verify-otp", {
+      const res = await axios.post("https://starbucks-backend1.onrender.com/verify-otp", {
         email: email.toLowerCase(),
         otp,
       });
@@ -92,7 +92,7 @@ const ChangePasswordOTP = () => {
     setLoading(true);
     
     try {
-      const res = await axios.post("https://starbucks-backend-r1ke.onrender.com/change-password-otp", {
+      const res = await axios.post("https://starbucks-backend1.onrender.com/change-password-otp", {
         email: email.toLowerCase(),
         newPassword,
       });
@@ -125,7 +125,7 @@ const ChangePasswordOTP = () => {
   const handleResendOTP = async () => {
     setLoading(true);
     try {
-      const res = await axios.post("https://starbucks-backend-r1ke.onrender.com/verify-email-send-otp", {
+      const res = await axios.post("https://starbucks-backend1.onrender.com/verify-email-send-otp", {
         email: email.toLowerCase(),
       });
       

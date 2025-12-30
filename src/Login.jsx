@@ -31,7 +31,7 @@ const Login = ({ setUsername }) => {
     setLoading(true);
 
     axios
-      .post("https://starbucks-backend-r1ke.onrender.com/login", {
+      .post("https://starbucks-backend1.onrender.com/login", {
         email: emailInput.toLowerCase(),
         password,
       })
@@ -64,13 +64,13 @@ const Login = ({ setUsername }) => {
     const top = window.screenY + (window.outerHeight - height) / 2;
 
     const popup = window.open(
-      "https://starbucks-backend-r1ke.onrender.com/auth/google",
+      "https://starbucks-backend1.onrender.com/auth/google",
       "_blank",
       `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no,scrollbars=yes,resizable=yes`
     );
 
     const handleMessage = (event) => {
-      if (event.origin !== "https://starbucks-backend-r1ke.onrender.com") return;
+      if (event.origin !== "https://starbucks-backend1.onrender.com") return;
 
       const { token, username, redirectPage } = event.data;
       if (token && username) {
