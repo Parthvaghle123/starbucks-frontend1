@@ -12,7 +12,8 @@ import {
   Mail,
   DollarSign,
   Clock,
-  CheckCircle
+  CheckCircle,
+  Activity   // ✅ ADD THIS
 } from "lucide-react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Orders.css";

@@ -15,6 +15,7 @@ import {
   CheckCircle,
   XCircle,
   AlertCircle,
+  Activity   // ✅ ADD THIS
 } from "lucide-react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Products.css";
