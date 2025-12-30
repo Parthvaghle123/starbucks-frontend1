@@ -199,8 +199,7 @@ const Orders = () => {
             <option value="All Status">All Status</option>
             <option value="Approved">Approved</option>
             <option value="Cancelled">Cancelled</option>
-            <option value="Other">Other</option>
-          </select>
+b          </select>
         </div>
       </div>
 
