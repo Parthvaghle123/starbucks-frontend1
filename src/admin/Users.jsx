@@ -125,9 +125,11 @@ const Users = () => {
 
   if (loading) {
     return (
-      <div className="loading">
-        <Activity className="animate-spin" />
-        <span>Loading users...</span>
+      <div className="dashboard-root">
+        <div className="loading">
+          <Activity className="animate-spin" size={24} />
+          <span style={{ marginLeft: '0.5rem' }}>Loading User...</span>
+        </div>
       </div>
     );
   }
