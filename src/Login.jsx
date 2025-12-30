@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import RedirectLoader from "./RedirectLoader";
+import googleLogo from "../assent/g-logo.png";
 import "./css/Login.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -31,7 +32,7 @@ const Login = ({ setUsername }) => {
     setLoading(true);
 
     axios
-      .post("https://starbucks-backend1.onrender.com/login", {
+      .post("http://localhost:4500/login", {
         email: emailInput.toLowerCase(),
         password,
       })
@@ -63,14 +64,14 @@ const Login = ({ setUsername }) => {
     const left = window.screenX + (window.outerWidth - width) / 2;
     const top = window.screenY + (window.outerHeight - height) / 2;
 
-    const popup = window.open(
-      "https://starbucks-backend1.onrender.com/auth/google",
+    window.open(
+      "http://localhost:4500/auth/google",
       "_blank",
       `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no,scrollbars=yes,resizable=yes`
     );
 
     const handleMessage = (event) => {
-      if (event.origin !== "https://starbucks-backend1.onrender.com") return;
+      if (event.origin !== "http://localhost:4500") return;
 
       const { token, username, redirectPage } = event.data;
       if (token && username) {
@@ -164,6 +165,7 @@ const Login = ({ setUsername }) => {
               className="login-with-google-btn fw-bold"
               onClick={loginwithgoogle}
             >
+              <img src={googleLogo} alt="Google Logo" className="google-icon" />
               Continue with Google
             </button>
           </div>
