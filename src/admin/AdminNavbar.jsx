@@ -52,7 +52,7 @@ const AdminNavbar = () => {
         {/* Navbar content */}
         <div className="collapse navbar-collapse" id="adminNavbarContent">
           {/* Main navigation links */}
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0 gap-5">
             <li className="nav-item">
               <NavLink
                 className={({ isActive }) =>
