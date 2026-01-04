@@ -425,7 +425,7 @@ const Profile = ({ token: propToken }) => {
                     className="btn btn-success w-100 fw-bold"
                     disabled={saving}
                   >
-                    {saving ? "Saving..." : "Save Changes"}
+                    {saving ? "Saving..." : "Submit"}
                   </button>
                   <button
                     type="button"
