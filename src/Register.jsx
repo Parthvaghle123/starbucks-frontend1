@@ -210,50 +210,52 @@ const Register = () => {
                 </div>
               </div>
 
-              <div className="mb-3 d-flex flex-column flex-sm-row gap-3 w-100">
-                <div className="d-flex flex-column flex-fill ">
-                  <label className="form-label">Phone</label>
-                  <div className="input-group">
-                    <select
-                      name="country_code"
-                      className="form-select l2"
-                      value={form.country_code}
-                      disabled
-                    >
-                      <option value="+91">+91 </option>
-                      <option value="+1">+1 </option>
-                      <option value="+44">+44 </option>
-                    </select>
-                    <input
-                      type="tel"
-                      name="phone"
-                      className="form-control w-75"
-                      placeholder="1234567890"
-                      value={form.phone}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  {errors.phone && (
-                    <small className="text-danger">{errors.phone}</small>
-                  )}
-                </div>
-                <div className="d-flex flex-column flex-fill ">
-                  <label className="form-label">Gender</label>
-                  <select
-                    className="form-select"
-                    name="gender"
-                    value={form.gender}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Gender</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                  </select>
-                  <small className="text-danger">{errors.gender}</small>
-                </div>
-              </div>
+           <div className="row g-3">
+  {/* Phone */}
+  <div className="col-12 col-sm-6">
+    <label className="form-label">Phone</label>
+
+    <div className="input-group phone-group">
+      <span className="input-group-text country-code">+91</span>
+
+      <input
+        type="tel"
+        name="phone"
+        className="form-control"
+        placeholder="1234567890"
+        value={form.phone}
+        onChange={handleChange}
+        required
+      />
+    </div>
+
+    {errors.phone && (
+      <small className="text-danger">{errors.phone}</small>
+    )}
+  </div>
+
+  {/* Gender */}
+  <div className="col-12 col-sm-6">
+    <label className="form-label">Gender</label>
+
+    <select
+      className="form-select gender-select"
+      name="gender"
+      value={form.gender}
+      onChange={handleChange}
+    >
+      <option value="">Select Gender</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+      <option value="other">Other</option>
+    </select>
+
+    {errors.gender && (
+      <small className="text-danger">{errors.gender}</small>
+    )}
+  </div>
+</div>
+
               {/* Address */}
               <div className="mb-3">
                 <label className="form-label">Address</label>
