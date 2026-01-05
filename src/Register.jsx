@@ -38,7 +38,12 @@ const Register = () => {
         setForm((prev) => ({ ...prev, phone: value }));
         setErrors((prev) => ({
           ...prev,
-          phone: value.length !== 10 ? "Phone must be exactly 10 digits." : "",
+          phone:
+            value === ""
+              ? ""
+              : value.length !== 10
+              ? "Phone must be exactly 10 digits."
+              : "",
         }));
       }
     }
@@ -50,19 +55,23 @@ const Register = () => {
         setErrors((prev) => ({
           ...prev,
           username:
-            value.length < 3 ? "Username must be at least 3 characters." : "",
+            value === ""
+              ? ""
+              : value.length < 3
+              ? "Username must be at least 3 characters."
+              : "",
         }));
       }
     }
 
-    // EMAIL (REAL-TIME @gmail.com)
+    // EMAIL
     else if (name === "email") {
       setForm((prev) => ({ ...prev, email: value }));
       setErrors((prev) => ({
         ...prev,
         email:
           value === ""
-            ? "Email is required."
+            ? ""
             : !gmailRegex.test(value)
             ? "Only valid @gmail.com email allowed."
             : "",
@@ -78,6 +87,11 @@ const Register = () => {
     // DOB
     else if (name === "dob") {
       setForm((prev) => ({ ...prev, dob: value }));
+
+      if (value === "") {
+        setErrors((prev) => ({ ...prev, dob: "" }));
+        return;
+      }
 
       const today = new Date();
       const dobDate = new Date(value);
@@ -97,7 +111,11 @@ const Register = () => {
       setErrors((prev) => ({
         ...prev,
         address:
-          value.length < 5 ? "Address must be at least 5 characters." : "",
+          value === ""
+            ? ""
+            : value.length < 5
+            ? "Address must be at least 5 characters."
+            : "",
       }));
     }
   };
@@ -111,7 +129,10 @@ const Register = () => {
 
     const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
 
-    if (value.length < 4) {
+    if (value === "") {
+      setStrengthMessage("");
+      setErrors((prev) => ({ ...prev, password: "" }));
+    } else if (value.length < 4) {
       setStrengthMessage("Weak password ❌");
       setErrors((prev) => ({
         ...prev,
@@ -174,7 +195,7 @@ const Register = () => {
             )}
 
             <form onSubmit={handleSubmit} autoComplete="off">
-              <div className="mb-3 d-flex flex-column flex-sm-row gap-3">
+            <div className="mb-3 d-flex flex-column flex-sm-row gap-3">
                 {/* Username */}
                 <div className="d-flex flex-column flex-fill ">
                   <label className="form-label">Username</label>
@@ -210,51 +231,50 @@ const Register = () => {
                 </div>
               </div>
 
-           <div className="row g-3">
-  {/* Phone */}
-  <div className="col-12 col-sm-6">
-    <label className="form-label">Phone</label>
+              <div className="row g-3">
+                {/* Phone */}
+                <div className="col-12 col-sm-6">
+                  <label className="form-label">Phone</label>
 
-    <div className="input-group phone-group">
-      <span className="input-group-text country-code">+91</span>
+                  <div className="input-group phone-group">
+                    <span className="input-group-text country-code">+91</span>
 
-      <input
-        type="tel"
-        name="phone"
-        className="form-control"
-        placeholder="1234567890"
-        value={form.phone}
-        onChange={handleChange}
-        required
-      />
-    </div>
+                    <input
+                      type="tel"
+                      name="phone"
+                      className="form-control"
+                      placeholder="1234567890"
+                      value={form.phone}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
 
-    {errors.phone && (
-      <small className="text-danger">{errors.phone}</small>
-    )}
-  </div>
+                  {errors.phone && (
+                    <small className="text-danger">{errors.phone}</small>
+                  )}
+                </div>
 
-  {/* Gender */}
-  <div className="col-12 col-sm-6">
-    <label className="form-label">Gender</label>
+                {/* Gender */}
+                <div className="col-12 col-sm-6">
+                  <label className="form-label">Gender</label>
 
-    <select
-      className="form-select gender-select"
-      name="gender"
-      value={form.gender}
-      onChange={handleChange}
-    >
-      <option value="">Select Gender</option>
-      <option value="male">Male</option>
-      <option value="female">Female</option>
-      <option value="other">Other</option>
-    </select>
+                  <select
+                    className="form-select gender-select"
+                    name="gender"
+                    value={form.gender}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
 
-    {errors.gender && (
-      <small className="text-danger">{errors.gender}</small>
-    )}
-  </div>
-</div>
+                  {errors.gender && (
+                    <small className="text-danger">{errors.gender}</small>
+                  )}
+                </div>
+              </div>
 
               {/* Address */}
               <div className="mb-3">
@@ -316,16 +336,6 @@ const Register = () => {
                 Register
               </button>
             </form>
-
-            <p className="text-center mt-3">
-              Already registered?{" "}
-              <a
-                href="/login"
-                className="text-decoration-none fw-bold text-success"
-              >
-                Login here
-              </a>
-            </p>
           </div>
         </div>
       </div>
