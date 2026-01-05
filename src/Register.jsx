@@ -16,6 +16,7 @@ const Register = () => {
     dob: "",
     address: "",
   });
+
   const [password, setPassword] = useState("");
   const [strengthMessage, setStrengthMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -23,128 +24,141 @@ const Register = () => {
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
-  // Handle Input Change
+  const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+
+  // ===============================
+  // HANDLE CHANGE (REAL-TIME)
+  // ===============================
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // ✅ Phone only digits max 10
+    // PHONE
     if (name === "phone") {
       if (/^\d{0,10}$/.test(value)) {
-        setForm((prev) => ({ ...prev, [name]: value }));
+        setForm((prev) => ({ ...prev, phone: value }));
+        setErrors((prev) => ({
+          ...prev,
+          phone: value.length !== 10 ? "Phone must be exactly 10 digits." : "",
+        }));
       }
     }
-    // ✅ Username only alphabets and space
+
+    // USERNAME
     else if (name === "username") {
       if (/^[A-Za-z\s]*$/.test(value)) {
-        setForm((prev) => ({ ...prev, [name]: value }));
+        setForm((prev) => ({ ...prev, username: value }));
+        setErrors((prev) => ({
+          ...prev,
+          username:
+            value.length < 3
+              ? "Username must be at least 3 characters."
+              : "",
+        }));
       }
     }
-    // ✅ Other inputs normal
-    else {
-      setForm((prev) => ({ ...prev, [name]: value }));
+
+    // EMAIL (REAL-TIME @gmail.com)
+    else if (name === "email") {
+      setForm((prev) => ({ ...prev, email: value }));
+      setErrors((prev) => ({
+        ...prev,
+        email:
+          value === ""
+            ? "Email is required."
+            : !gmailRegex.test(value)
+            ? "Only valid @gmail.com email allowed."
+            : "",
+      }));
+    }
+
+    // GENDER
+    else if (name === "gender") {
+      setForm((prev) => ({ ...prev, gender: value }));
+      setErrors((prev) => ({ ...prev, gender: "" }));
+    }
+
+    // DOB
+    else if (name === "dob") {
+      setForm((prev) => ({ ...prev, dob: value }));
+
+      const today = new Date();
+      const dobDate = new Date(value);
+      let age = today.getFullYear() - dobDate.getFullYear();
+      const m = today.getMonth() - dobDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dobDate.getDate())) age--;
+
+      setErrors((prev) => ({
+        ...prev,
+        dob: age < 14 ? "You must be at least 14 years old." : "",
+      }));
+    }
+
+    // ADDRESS
+    else if (name === "address") {
+      setForm((prev) => ({ ...prev, address: value }));
+      setErrors((prev) => ({
+        ...prev,
+        address:
+          value.length < 5
+            ? "Address must be at least 5 characters."
+            : "",
+      }));
     }
   };
 
-  // Password Strength
+  // ===============================
+  // PASSWORD REAL-TIME
+  // ===============================
   const handlePasswordChange = (e) => {
     const value = e.target.value;
     setPassword(value);
 
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
     if (value.length < 4) {
       setStrengthMessage("Weak password ❌");
-    } else if (/[A-Z]/.test(value) && /\d/.test(value) && value.length >= 8) {
+      setErrors((prev) => ({
+        ...prev,
+        password:
+          "Password must be 8+ chars, 1 uppercase, 1 number, 1 special char.",
+      }));
+    } else if (passwordRegex.test(value)) {
       setStrengthMessage("Strong password ✅");
+      setErrors((prev) => ({ ...prev, password: "" }));
     } else {
       setStrengthMessage("Moderate password ⚠️");
+      setErrors((prev) => ({
+        ...prev,
+        password:
+          "Password must be 8+ chars, 1 uppercase, 1 number, 1 special char.",
+      }));
     }
   };
 
-  // Validation Function
-  const validateForm = () => {
-    let newErrors = {};
-
-    // Username
-    if (!form.username || form.username.length < 3) {
-      newErrors.username = "Username must be at least 3 characters.";
-    } else if (!/^[A-Za-z\s]+$/.test(form.username)) {
-      newErrors.username = "Username must contain only letters.";
-    }
-    // Email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(form.email)) {
-      newErrors.email = "Enter a valid email address.";
-    }
-
-    // Phone ✅ only 10 digits required
-    const phoneRegex = /^[0-9]{10}$/;
-    if (!phoneRegex.test(form.phone)) {
-      newErrors.phone = "Phone must be exactly 10 digits.";
-    }
-
-    // Gender
-    if (!form.gender) {
-      newErrors.gender = "Please select gender.";
-    }
-
-    // DOB + Age Check (Minimum 14 years)
-  if (!form.dob) {
-    newErrors.dob = "Date of birth is required.";
-  } else {
-    const today = new Date();
-    const dobDate = new Date(form.dob);
-
-    let age = today.getFullYear() - dobDate.getFullYear();
-    const monthDiff = today.getMonth() - dobDate.getMonth();
-
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate())) {
-      age--;
-    }
-
-    if (age < 14) {
-      newErrors.dob = "You must be at least 14 years old to register.";
-    }
-  }
-    // Address
-    if (!form.address || form.address.length < 5) {
-      newErrors.address = "Address must be at least 5 characters.";
-    }
-
-    // Password
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
-    if (!passwordRegex.test(password)) {
-      newErrors.password =
-        "Password must be 8+ chars, 1 uppercase, 1 number, 1 special char.";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  // Submit Handler
+  // ===============================
+  // SUBMIT
+  // ===============================
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!validateForm()) return; // ❌ stop if validation fails
+    if (Object.values(errors).some((err) => err !== "")) return;
 
     axios
       .post("https://starbucks-backend1.onrender.com/register", {
         ...form,
-        password: password,
+        password,
       })
       .then((res) => {
         if (res.data.success) {
           setToastMessage("Registration successful ✅");
           setShowSuccessToast(true);
-
           setTimeout(() => setShowSuccessToast(false), 3000);
-          setTimeout(() => {
-            navigate("/login");
-          }, 1000);
+          setTimeout(() => navigate("/login"), 1000);
         }
       })
-      .catch((err) => {
-        console.error("Signup error:", err);
-        setErrorMessage("User Already Exits.");
+      .catch(() => {
+        setErrorMessage("User Already Exists.");
       });
   };
 
@@ -165,166 +179,89 @@ const Register = () => {
             )}
 
             <form onSubmit={handleSubmit} autoComplete="off">
-              <div className="mb-3 d-flex flex-column flex-sm-row gap-3">
-                {/* Username */}
-                <div className="d-flex flex-column flex-fill ">
-                  <label className="form-label">Username</label>
-                  <input
-                    type="text"
-                    name="username"
-                    className="form-control"
-                    placeholder="Enter your name"
-                    value={form.username}
-                    onChange={handleChange}
-                    required
-                  />
-                  {errors.username && (
-                    <small className="text-danger">{errors.username}</small>
-                  )}
-                </div>
+              {/* USERNAME */}
+              <input
+                className="form-control mb-1"
+                name="username"
+                placeholder="Username"
+                value={form.username}
+                onChange={handleChange}
+              />
+              <small className="text-danger">{errors.username}</small>
 
-                {/* Email */}
-                <div className="d-flex flex-column flex-fill">
-                  <label className="form-label">Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    className="form-control"
-                    placeholder="example@gmail.com"
-                    value={form.email}
-                    onChange={handleChange}
-                    required
-                  />
-                  {errors.email && (
-                    <small className="text-danger">{errors.email}</small>
-                  )}
-                </div>
-              </div>
+              {/* EMAIL */}
+              <input
+                className="form-control mt-2 mb-1"
+                name="email"
+                placeholder="example@gmail.com"
+                value={form.email}
+                onChange={handleChange}
+              />
+              <small className="text-danger">{errors.email}</small>
 
-              <div className="mb-3 d-flex flex-column flex-sm-row gap-3">
-                <div className="d-flex flex-column flex-fill ">
-                  <label className="form-label">Phone</label>
-                  <div className="input-group">
-                    <select
-                      name="country_code"
-                      className="form-select l2"
-                      value={form.country_code}
-                      disabled
-                    >
-                      <option value="+91">+91 </option>
-                      <option value="+1">+1 </option>
-                      <option value="+44">+44 </option>
-                    </select>
-                    <input
-                      type="tel"
-                      name="phone"
-                      className="form-control"
-                      placeholder="1234567890"
-                      value={form.phone}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  {errors.phone && (
-                    <small className="text-danger">{errors.phone}</small>
-                  )}
-                </div>
-                <div className="d-flex flex-column flex-fill">
-                  <label className="form-label">Gender</label>
-                  <div className="d-flex gap-3 justify-content-center mt-2">
-                    {["male", "female", "other"].map((g) => (
-                      <label key={g} style={{ flex: 1 }}>
-                        <input
-                          type="radio"
-                          name="gender"
-                          value={g}
-                          checked={form.gender === g}
-                          onChange={handleChange}
-                          className="d-none align-items-center"
-                        />
-                        <div
-                          className={`p-2 rounded text-center ${
-                            form.gender === g
-                              ? "border border-success bg-light"
-                              : "border"
-                          }`}
-                        >
-                          {g.charAt(0).toUpperCase() + g.slice(1)}
-                        </div>
-                      </label>
-                    ))}
-                  </div>
-                  {errors.gender && (
-                    <small className="text-danger">{errors.gender}</small>
-                  )}
-                </div>
-              </div>
-              {/* Address */}
-              <div className="mb-3">
-                <label className="form-label">Address</label>
-                <textarea
-                  name="address"
-                  className="form-control"
-                  placeholder="Enter your address"
-                  rows="2"
-                  style={{ resize: "none", height: "80px" }}
-                  value={form.address}
-                  onChange={handleChange}
-                  required
-                ></textarea>
-                {errors.address && (
-                  <small className="text-danger">{errors.address}</small>
-                )}
-              </div>
-              <div className="mb-3 d-flex flex-column flex-sm-row gap-3">
-                <div className="d-flex flex-column flex-fill">
-                  <label className="form-label">Date of Birth</label>
-                  <input
-                    type="date"
-                    name="dob"
-                    className="form-control"
-                    value={form.dob}
-                    onChange={handleChange}
-                    required
-                  />
-                  {errors.dob && (
-                    <small className="text-danger">{errors.dob}</small>
-                  )}
-                </div>
-                <div className="d-flex flex-column flex-fill">
-                  <label className="form-label">Password</label>
-                  <input
-                    type="password"
-                    name="password"
-                    placeholder="********"
-                    className="form-control"
-                    value={password}
-                    onChange={handlePasswordChange}
-                    required
-                  />
-                  <small className="text-muted">{strengthMessage}</small>
-                  {errors.password && (
-                    <small className="text-danger d-block">
-                      {errors.password}
-                    </small>
-                  )}
-                </div>
-              </div>
+              {/* PHONE */}
+              <input
+                className="form-control mt-2 mb-1"
+                name="phone"
+                placeholder="1234567890"
+                value={form.phone}
+                onChange={handleChange}
+              />
+              <small className="text-danger">{errors.phone}</small>
 
-              <button type="submit" className="btn7 fw-bold w-100 rounded">
+              {/* GENDER */}
+              <select
+                className="form-select mt-2"
+                name="gender"
+                value={form.gender}
+                onChange={handleChange}
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+              <small className="text-danger">{errors.gender}</small>
+
+              {/* ADDRESS */}
+              <textarea
+                className="form-control mt-2"
+                name="address"
+                placeholder="Address"
+                value={form.address}
+                onChange={handleChange}
+              />
+              <small className="text-danger">{errors.address}</small>
+
+              {/* DOB */}
+              <input
+                type="date"
+                className="form-control mt-2"
+                name="dob"
+                value={form.dob}
+                onChange={handleChange}
+              />
+              <small className="text-danger">{errors.dob}</small>
+
+              {/* PASSWORD */}
+              <input
+                type="password"
+                className="form-control mt-2"
+                placeholder="Password"
+                value={password}
+                onChange={handlePasswordChange}
+              />
+              <small className="text-muted">{strengthMessage}</small>
+              <small className="text-danger d-block">{errors.password}</small>
+
+              <button
+                type="submit"
+                className="btn7 fw-bold w-100 rounded mt-3"
+                disabled={Object.values(errors).some((e) => e !== "")}
+              >
                 Register
               </button>
             </form>
-
-            <p className="text-center mt-3">
-              Already registered?{" "}
-              <a
-                href="/login"
-                className="text-decoration-none fw-bold text-success"
-              >
-                Login here
-              </a>
-            </p>
           </div>
         </div>
       </div>
