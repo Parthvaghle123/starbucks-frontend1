@@ -216,7 +216,7 @@ const Register = () => {
                   <div className="input-group">
                     <select
                       name="country_code"
-                      className="form-select l2 "
+                      className="form-select l2"
                       value={form.country_code}
                       disabled
                     >
@@ -227,7 +227,7 @@ const Register = () => {
                     <input
                       type="tel"
                       name="phone"
-                      className="form-control"
+                      className="form-control w-75"
                       placeholder="1234567890"
                       value={form.phone}
                       onChange={handleChange}
