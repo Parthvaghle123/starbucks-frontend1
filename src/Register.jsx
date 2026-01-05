@@ -158,7 +158,7 @@ const Register = () => {
         }
       })
       .catch(() => {
-        setErrorMessage("User Already Exists.");
+        setErrorMessage("Someone error occurred. Please try again.");
       });
   };
 
@@ -179,38 +179,73 @@ const Register = () => {
             )}
 
             <form onSubmit={handleSubmit} autoComplete="off">
-              {/* USERNAME */}
-              <input
-                className="form-control mb-1"
-                name="username"
-                placeholder="Username"
-                value={form.username}
-                onChange={handleChange}
-              />
-              <small className="text-danger">{errors.username}</small>
+              <div className="mb-3 d-flex flex-column flex-sm-row gap-3">
+                {/* Username */}
+                <div className="d-flex flex-column flex-fill ">
+                  <label className="form-label">Username</label>
+                  <input
+                    type="text"
+                    name="username"
+                    className="form-control"
+                    placeholder="Enter your name"
+                    value={form.username}
+                    onChange={handleChange}
+                    required
+                  />
+                  {errors.username && (
+                    <small className="text-danger">{errors.username}</small>
+                  )}
+                </div>
 
-              {/* EMAIL */}
-              <input
-                className="form-control mt-2 mb-1"
-                name="email"
-                placeholder="example@gmail.com"
-                value={form.email}
-                onChange={handleChange}
-              />
-              <small className="text-danger">{errors.email}</small>
+                {/* Email */}
+                <div className="d-flex flex-column flex-fill">
+                  <label className="form-label">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    className="form-control"
+                    placeholder="example@gmail.com"
+                    value={form.email}
+                    onChange={handleChange}
+                    required
+                  />
+                  {errors.email && (
+                    <small className="text-danger">{errors.email}</small>
+                  )}
+                </div>
+              </div>
 
-              {/* PHONE */}
-              <input
-                className="form-control mt-2 mb-1"
-                name="phone"
-                placeholder="1234567890"
-                value={form.phone}
-                onChange={handleChange}
-              />
-              <small className="text-danger">{errors.phone}</small>
-
-              {/* GENDER */}
-              <select
+              <div className="mb-3 d-flex flex-column flex-sm-row gap-3">
+                <div className="d-flex flex-column flex-fill ">
+                  <label className="form-label">Phone</label>
+                  <div className="input-group">
+                    <select
+                      name="country_code"
+                      className="form-select l2"
+                      value={form.country_code}
+                      disabled
+                    >
+                      <option value="+91">+91 </option>
+                      <option value="+1">+1 </option>
+                      <option value="+44">+44 </option>
+                    </select>
+                    <input
+                      type="tel"
+                      name="phone"
+                      className="form-control"
+                      placeholder="1234567890"
+                      value={form.phone}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  {errors.phone && (
+                    <small className="text-danger">{errors.phone}</small>
+                  )}
+                </div>
+                <div className="d-flex flex-column flex-fill">
+                  <label className="form-label">Gender</label>
+                             <select
                 className="form-select mt-2"
                 name="gender"
                 value={form.gender}
@@ -222,46 +257,78 @@ const Register = () => {
                 <option value="other">Other</option>
               </select>
               <small className="text-danger">{errors.gender}</small>
-
-              {/* ADDRESS */}
-              <textarea
-                className="form-control mt-2"
-                name="address"
-                placeholder="Address"
-                value={form.address}
-                onChange={handleChange}
-              />
-              <small className="text-danger">{errors.address}</small>
-
-              {/* DOB */}
-              <input
-                type="date"
-                className="form-control mt-2"
-                name="dob"
-                value={form.dob}
-                onChange={handleChange}
-              />
-              <small className="text-danger">{errors.dob}</small>
-
-              {/* PASSWORD */}
-              <input
-                type="password"
-                className="form-control mt-2"
-                placeholder="Password"
-                value={password}
-                onChange={handlePasswordChange}
-              />
-              <small className="text-muted">{strengthMessage}</small>
-              <small className="text-danger d-block">{errors.password}</small>
+                </div>
+              </div>
+              {/* Address */}
+              <div className="mb-3">
+                <label className="form-label">Address</label>
+                <textarea
+                  name="address"
+                  className="form-control"
+                  placeholder="Enter your address"
+                  rows="2"
+                  style={{ resize: "none", height: "80px" }}
+                  value={form.address}
+                  onChange={handleChange}
+                  required
+                ></textarea>
+                {errors.address && (
+                  <small className="text-danger">{errors.address}</small>
+                )}
+              </div>
+              <div className="mb-3 d-flex flex-column flex-sm-row gap-3">
+                <div className="d-flex flex-column flex-fill">
+                  <label className="form-label">Date of Birth</label>
+                  <input
+                    type="date"
+                    name="dob"
+                    className="form-control"
+                    value={form.dob}
+                    onChange={handleChange}
+                    required
+                  />
+                  {errors.dob && (
+                    <small className="text-danger">{errors.dob}</small>
+                  )}
+                </div>
+                <div className="d-flex flex-column flex-fill">
+                  <label className="form-label">Password</label>
+                  <input
+                    type="password"
+                    name="password"
+                    placeholder="********"
+                    className="form-control"
+                    value={password}
+                    onChange={handlePasswordChange}
+                    required
+                  />
+                  <small className="text-muted">{strengthMessage}</small>
+                  {errors.password && (
+                    <small className="text-danger d-block">
+                      {errors.password}
+                    </small>
+                  )}
+                </div>
+              </div>
 
               <button
                 type="submit"
-                className="btn7 fw-bold w-100 rounded mt-3"
+                className="btn7 fw-bold w-100 rounded"
                 disabled={Object.values(errors).some((e) => e !== "")}
               >
                 Register
               </button>
             </form>
+
+            <p className="text-center mt-3">
+              Already registered?{" "}
+              <a
+                href="/login"
+                className="text-decoration-none fw-bold text-success"
+              >
+                Login here
+              </a>
+            </p>
           </div>
         </div>
       </div>
