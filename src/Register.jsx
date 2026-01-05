@@ -210,13 +210,13 @@ const Register = () => {
                 </div>
               </div>
 
-              <div className="mb-3 d-flex flex-column flex-sm-row gap-3">
+              <div className="mb-3 d-flex flex-column flex-sm-row gap-3 w-50">
                 <div className="d-flex flex-column flex-fill ">
                   <label className="form-label">Phone</label>
                   <div className="input-group">
                     <select
                       name="country_code"
-                      className="form-select l2 w-50"
+                      className="form-select l2 w-100"
                       value={form.country_code}
                       disabled
                     >
@@ -241,7 +241,7 @@ const Register = () => {
                 <div className="d-flex flex-column flex-fill ">
                   <label className="form-label">Gender</label>
                   <select
-                    className="form-select w-50"
+                    className="form-select w-100"
                     name="gender"
                     value={form.gender}
                     onChange={handleChange}
