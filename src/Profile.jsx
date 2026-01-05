@@ -325,64 +325,50 @@ const Profile = ({ token: propToken }) => {
                   </div>
                 </div>
 
-                <div className="mb-3 d-flex flex-column flex-sm-row gap-3">
-                  <div className="d-flex flex-column flex-fill">
-                    <label className="form-label">Phone</label>
-                    <div className="input-group">
-                      <select
-                        name="country_code"
-                        className="form-select l2"
-                        value={profile.country_code}
-                        disabled
-                      >
-                        <option value="+91">+91</option>
-                        <option value="+1">+1</option>
-                        <option value="+44">+44</option>
-                      </select>
-                      <input
-                        type="tel"
-                        name="phone"
-                        className="form-control"
-                        value={profile.phone}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                    {errors.phone && (
-                      <small className="text-danger">{errors.phone}</small>
-                    )}
+                 <div className="row g-3">
+                {/* Phone */}
+                <div className="col-12 col-sm-6">
+                  <label className="form-label">Phone</label>
+
+                  <div className="input-group phone-group">
+                    <span className="input-group-text country-code">+91</span>
+
+                    <input
+                      type="tel"
+                      name="phone"
+                      className="form-control"
+                      placeholder="1234567890"
+                      value={profile.phone}
+                      onChange={handleChange}
+                      required
+                    />
                   </div>
 
-                  <div className="d-flex flex-column flex-fill">
-                    <label className="form-label">Gender</label>
-                    <div className="d-flex gap-3 justify-content-center mt-2">
-                      {["male", "female", "other"].map((g) => (
-                        <label key={g} style={{ flex: 1 }}>
-                          <input
-                            type="radio"
-                            name="gender"
-                            value={g}
-                            checked={profile.gender === g}
-                            onChange={handleChange}
-                            className="d-none"
-                          />
-                          <div
-                            className={`p-2 rounded text-center ${
-                              profile.gender === g
-                                ? "border border-success bg-light"
-                                : "border"
-                            }`}
-                          >
-                            {g.charAt(0).toUpperCase() + g.slice(1)}
-                          </div>
-                        </label>
-                      ))}
-                    </div>
-                    {errors.gender && (
-                      <small className="text-danger">{errors.gender}</small>
-                    )}
-                  </div>
+                  {errors.phone && (
+                    <small className="text-danger">{errors.phone}</small>
+                  )}
                 </div>
+
+                {/* Gender */}
+                <div className="col-12 col-sm-6">
+                  <label className="form-label">Gender</label>
+
+                  <select
+                    className="form-select gender-select"
+                    name="gender"
+                    value={profile.gender}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+
+                  {errors.gender && (
+                    <small className="text-danger">{errors.gender}</small>
+                  )}
+                </div>
+              </div>
 
                 <div className="mb-3">
                   <label className="form-label">Address</label>
