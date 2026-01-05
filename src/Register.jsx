@@ -50,9 +50,7 @@ const Register = () => {
         setErrors((prev) => ({
           ...prev,
           username:
-            value.length < 3
-              ? "Username must be at least 3 characters."
-              : "",
+            value.length < 3 ? "Username must be at least 3 characters." : "",
         }));
       }
     }
@@ -99,9 +97,7 @@ const Register = () => {
       setErrors((prev) => ({
         ...prev,
         address:
-          value.length < 5
-            ? "Address must be at least 5 characters."
-            : "",
+          value.length < 5 ? "Address must be at least 5 characters." : "",
       }));
     }
   };
@@ -113,8 +109,7 @@ const Register = () => {
     const value = e.target.value;
     setPassword(value);
 
-    const passwordRegex =
-      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
 
     if (value.length < 4) {
       setStrengthMessage("Weak password ❌");
@@ -221,7 +216,7 @@ const Register = () => {
                   <div className="input-group">
                     <select
                       name="country_code"
-                      className="form-select l2"
+                      className="form-select l2 w-50"
                       value={form.country_code}
                       disabled
                     >
@@ -243,20 +238,20 @@ const Register = () => {
                     <small className="text-danger">{errors.phone}</small>
                   )}
                 </div>
-                <div className="d-flex flex-column flex-fill">
+                <div className="d-flex flex-column flex-fill ">
                   <label className="form-label">Gender</label>
-                             <select
-                className="form-select mt-2"
-                name="gender"
-                value={form.gender}
-                onChange={handleChange}
-              >
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
-              <small className="text-danger">{errors.gender}</small>
+                  <select
+                    className="form-select w-50"
+                    name="gender"
+                    value={form.gender}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <small className="text-danger">{errors.gender}</small>
                 </div>
               </div>
               {/* Address */}
