@@ -240,3 +240,139 @@
   justify-content: space-between;
   margin-bottom: 20px;
 }
+
+/* Change Password Progress Indicator Styles */
+.change-password-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #006241;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+.progress-indicator {
+  margin-bottom: 2rem;
+}
+
+.progress-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  padding: 0 20px;
+  margin: 20px 0;
+}
+
+.progress-line::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 15%;
+  right: 15%;
+  height: 2px;
+  background-color: #e0e0e0;
+  z-index: 0;
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.step-circle.active {
+  background-color: #006241;
+  border: 2px solid #006241;
+}
+
+.step-circle.inactive {
+  background-color: #f5f5f5;
+  border: 2px solid #e0e0e0;
+}
+
+.step-number {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.step-circle.active .step-number {
+  color: #ffffff;
+}
+
+.step-circle.inactive .step-number {
+  color: #666666;
+}
+
+.step-label {
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.step-label.active {
+  color: #006241;
+}
+
+.step-label.inactive {
+  color: #666666;
+}
+
+/* Mobile Responsive for Progress Indicator */
+@media (max-width: 768px) {
+  .change-password-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .progress-line {
+    padding: 0 10px;
+  }
+  
+  .step-circle {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .step-number {
+    font-size: 16px;
+  }
+  
+  .step-label {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .change-password-title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .step-circle {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .step-number {
+    font-size: 14px;
+  }
+  
+  .step-label {
+    font-size: 11px;
+  }
+}

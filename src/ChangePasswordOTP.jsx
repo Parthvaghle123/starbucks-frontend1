@@ -148,26 +148,33 @@ const ChangePasswordOTP = () => {
     <div className="body">
       <div className="container d-flex justify-content-center align-items-center vh-100">
         <div className="login-container">
-          <h2 className="text-success text-center mb-3 h2">
+          <h2 className="change-password-title">
             Change Password
           </h2>
           
           {/* Progress indicator */}
-          <div className="mb-4">
-            <div className="progress-badges">
-              <span className={`badge ${step >= 1 ? 'bg-success' : 'bg-secondary'}`}>
-                1. Email
-              </span>
-              <span className={`badge ${step >= 2 ? 'bg-success' : 'bg-secondary'}`}>
-                2. OTP
-              </span>
-              <span className={`badge ${step >= 3 ? 'bg-success' : 'bg-secondary'}`}>
-                3. Password
-              </span>
+          <div className="progress-indicator mb-4">
+            <div className="progress-line">
+              <div className="progress-step">
+                <div className={`step-circle ${step >= 1 ? 'active' : 'inactive'}`}>
+                  <span className="step-number">1</span>
+                </div>
+                <span className={`step-label ${step >= 1 ? 'active' : 'inactive'}`}>Email</span>
+              </div>
+              <div className="progress-step">
+                <div className={`step-circle ${step >= 2 ? 'active' : 'inactive'}`}>
+                  <span className="step-number">2</span>
+                </div>
+                <span className={`step-label ${step >= 2 ? 'active' : 'inactive'}`}>OTP</span>
+              </div>
+              <div className="progress-step">
+                <div className={`step-circle ${step >= 3 ? 'active' : 'inactive'}`}>
+                  <span className="step-number">3</span>
+                </div>
+                <span className={`step-label ${step >= 3 ? 'active' : 'inactive'}`}>Password</span>
+              </div>
             </div>
           </div>
-          
-          <hr />
 
           {/* Alert Message */}
           {alertMessage && (
