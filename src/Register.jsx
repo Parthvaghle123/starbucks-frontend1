@@ -336,6 +336,15 @@ const Register = () => {
                 Register
               </button>
             </form>
+               <p className="text-center mt-3">
+              Already registered?{" "}
+              <a
+                href="/login"
+                className="text-decoration-none fw-bold text-success"
+              >
+                Login here
+              </a>
+            </p>
           </div>
         </div>
       </div>
