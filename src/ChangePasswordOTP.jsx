@@ -148,7 +148,7 @@ const ChangePasswordOTP = () => {
     <div className="body">
       <div className="container d-flex justify-content-center align-items-center vh-100">
         <div className="login-container">
-          <h2 className="change-password-title">
+          <h2 className="change-password-title text-success text-center">
             Change Password
           </h2>
           
