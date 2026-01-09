@@ -213,7 +213,7 @@ td {
 }
 
 .checkout-subtitle {
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;   /* Lighter subtitle font */
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
   font-size: 1.1rem;
   font-weight: 500;
   color: #00754a;                      /* Lighter Starbucks green */
