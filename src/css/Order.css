@@ -6,6 +6,7 @@ body {
 .order-heading {
   font-size: 2rem;
   font-weight: bold;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
   background: linear-gradient(90deg, #198754, #28a745);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
