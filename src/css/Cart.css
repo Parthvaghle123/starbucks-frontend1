@@ -203,7 +203,7 @@ td {
   color: #229954;
 }
 .checkout-title {
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;   /* Modern clean font */
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
   font-size: 2.5rem;                   /* Bigger title */
   font-weight: 700;                    /* Bold */
   color: #006241;                      /* Starbucks dark green */
