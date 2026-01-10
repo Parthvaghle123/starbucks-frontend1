@@ -23,8 +23,6 @@ const Check = () => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
-  const [transactionId, setTransactionId] = useState("");
   const UPI_ID = "vaghelaparth2005-2@oksbi";
 
   useEffect(() => {
@@ -91,8 +89,6 @@ const Check = () => {
   const handleQRPaymentSuccess = async () => {
     setLoading(true);
     const txId = generateTransactionId();
-    setTransactionId(txId);
-    setPaymentSuccess(true);
 
     // Wait 2 seconds then place order
     setTimeout(async () => {
@@ -110,14 +106,17 @@ const Check = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        // Redirect to orders page after 2 seconds
-        setTimeout(() => {
-          navigate("/orders");
-        }, 2000);
+        // Navigate to OrderSuccess page with QR code message
+        navigate("/order-success", {
+          state: {
+            message: "✅ Payment Successful! Redirecting to Orders...",
+            redirectUrl: "/orders",
+            seconds: 3,
+          },
+        });
       } catch (err) {
         console.error("Order failed", err);
         setErrorMsg("❌ Order failed. Please try again.");
-        setPaymentSuccess(false);
         setLoading(false);
       }
     }, 2000);
@@ -220,7 +219,18 @@ const placeOrder = async (e) => {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    navigate("/order-success");
+    // Navigate to OrderSuccess page with appropriate message based on payment type
+    const successMessage = formData.paymentMethod === "Online Payment" && formData.paymentType === "Card"
+      ? "✅ Payment Successful! Order Placed. Redirecting to Orders..."
+      : "✅ Order Successfully Placed! Redirecting to Orders...";
+
+    navigate("/order-success", {
+      state: {
+        message: successMessage,
+        redirectUrl: "/orders",
+        seconds: 3,
+      },
+    });
   } catch (err) {
     console.error("Order failed", err);
     setErrorMsg("❌ Order failed. Please try again.");
@@ -246,15 +256,6 @@ const placeOrder = async (e) => {
             <hr />
             {errorMsg && (
               <div className="alert alert-danger py-2">{errorMsg}</div>
-            )}
-
-            {/* Payment Success Message */}
-            {paymentSuccess && (
-              <div className="alert alert-success text-center mb-3">
-                <h5 className="fw-bold">✅ Payment Successful!</h5>
-                <p className="mb-0">Transaction ID: <strong>{transactionId}</strong></p>
-                <p className="mb-0">Redirecting to Orders...</p>
-              </div>
             )}
 
             <form onSubmit={placeOrder}>
