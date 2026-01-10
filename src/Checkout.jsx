@@ -489,7 +489,7 @@ const placeOrder = async (e) => {
                   }}
                   disabled={loading}
                 >
-                  {loading ? "Placing Order..." : "Submit Order"}
+                  {loading ? "Submit Order..." : "Submit Order"}
                 </button>
               </div>
             </form>
