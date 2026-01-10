@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { QRCodeSVG } from "qrcode.react";
 import "./css/Cart.css";
 
 const Check = () => {
@@ -13,19 +12,13 @@ const Check = () => {
     countryCode: "+91",
     address: "",
     paymentMethod: "Cash On Delivery",
-    paymentType: "Card", // Card or QRCode
     cardNumber: "",
     expiry: "",
     cvv: "",
   });
 
-  const [_cartItems, setCartItems] = useState([]);
-  const [totalAmount, setTotalAmount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
-  const [transactionId, setTransactionId] = useState("");
-  const UPI_ID = "vaghelaparth2005-2@oksbi";
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -46,81 +39,12 @@ const Check = () => {
       }
     };
 
-    const fetchCart = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
-      try {
-        const res = await axios.get("https://starbucks-backend1.onrender.com/cart", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const cart = res.data.cart || [];
-        setCartItems(cart);
-        const total = cart.reduce((sum, item) => sum + item.total, 0);
-        setTotalAmount(total);
-      } catch (err) {
-        console.error("Error fetching cart:", err);
-      }
-    };
-
     fetchUserProfile();
-    fetchCart();
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    
-    // Reset payment type when payment method changes
-    if (name === "paymentMethod") {
-      setFormData((prev) => ({ ...prev, paymentType: "Card" }));
-    }
-  };
-
-  const handlePaymentTypeChange = (e) => {
-    const paymentType = e.target.value;
-    setFormData((prev) => ({ ...prev, paymentType }));
-  };
-
-  const generateTransactionId = () => {
-    const timestamp = Date.now();
-    const random = Math.floor(Math.random() * 10000);
-    return `TXN${timestamp}${random}`;
-  };
-
-  const handleQRPaymentSuccess = async () => {
-    setLoading(true);
-    const txId = generateTransactionId();
-    setTransactionId(txId);
-    setPaymentSuccess(true);
-
-    // Wait 2 seconds then place order
-    setTimeout(async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const payload = {
-          ...formData,
-          paymentMethod: "Online Payment",
-          paymentType: "QRCode",
-          transactionId: txId,
-          paymentStatus: "Paid",
-        };
-
-        await axios.post("https://starbucks-backend1.onrender.com/order", payload, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        // Redirect to orders page after 2 seconds
-        setTimeout(() => {
-          navigate("/orders");
-        }, 2000);
-      } catch (err) {
-        console.error("Order failed", err);
-        setErrorMsg("❌ Order failed. Please try again.");
-        setPaymentSuccess(false);
-        setLoading(false);
-      }
-    }, 2000);
   };
 
   // Luhn algorithm implementation
@@ -144,15 +68,9 @@ const Check = () => {
 const placeOrder = async (e) => {
   e.preventDefault();
 
-  // If QR Code payment, handle it separately
-  if (formData.paymentMethod === "Online Payment" && formData.paymentType === "QRCode") {
-    handleQRPaymentSuccess();
-    return;
-  }
-
   const rawCardNumber = formData.cardNumber.replace(/\s/g, "");
 
-  if (formData.paymentMethod === "Online Payment" && formData.paymentType === "Card") {
+  if (formData.paymentMethod === "Online Payment") {
     // Basic length check — many cards are 13-19 digits, but most common are 16.
     if (rawCardNumber.length < 13 || rawCardNumber.length > 19) {
       alert(" Invalid card number — it should be between 13 and 19 digits.");
@@ -213,7 +131,6 @@ const placeOrder = async (e) => {
     const payload = {
       ...formData,
       cardNumber: rawCardNumber,
-      paymentStatus: formData.paymentMethod === "Cash On Delivery" ? "Pending" : "Paid",
     };
 
     await axios.post("https://starbucks-backend1.onrender.com/order", payload, {
@@ -229,9 +146,6 @@ const placeOrder = async (e) => {
   }
 };
 
-  // Generate UPI payment string
-  const upiPaymentString = `upi://pay?pa=${UPI_ID}&am=${totalAmount}&cu=INR&tn=Starbucks Order`;
-
   return (
     <div className="container py-4">
       <div className="row justify-content-center">
@@ -246,15 +160,6 @@ const placeOrder = async (e) => {
             <hr />
             {errorMsg && (
               <div className="alert alert-danger py-2">{errorMsg}</div>
-            )}
-
-            {/* Payment Success Message */}
-            {paymentSuccess && (
-              <div className="alert alert-success text-center mb-3">
-                <h5 className="fw-bold">✅ Payment Successful!</h5>
-                <p className="mb-0">Transaction ID: <strong>{transactionId}</strong></p>
-                <p className="mb-0">Redirecting to Orders...</p>
-              </div>
             )}
 
             <form onSubmit={placeOrder}>
@@ -349,131 +254,75 @@ const placeOrder = async (e) => {
                   </div>
                 </div>
               </div>
-              {/* Payment Type Selection for Online Payment */}
+              {/* Card Details */}
               {formData.paymentMethod === "Online Payment" && (
                 <>
                   <hr />
-                  <h6 className="fw-bold mb-3">Payment Type</h6>
-                  <div className="mb-3 d-flex flex-column gap-2">
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="paymentType"
-                        value="Card"
-                        checked={formData.paymentType === "Card"}
-                        onChange={handlePaymentTypeChange}
-                        id="cardPayment"
-                      />
-                      <label className="form-check-label" htmlFor="cardPayment">
-                        Card Payment
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="paymentType"
-                        value="QRCode"
-                        checked={formData.paymentType === "QRCode"}
-                        onChange={handlePaymentTypeChange}
-                        id="qrPayment"
-                      />
-                      <label className="form-check-label" htmlFor="qrPayment">
-                        QR Code Payment
-                      </label>
-                    </div>
+                  <h6 className="fw-bold mb-3">Card Details</h6>
+
+                  {/* Card Number */}
+                  <div className="mb-3">
+                    <label className="form-label">Card Number</label>
+                    <input
+                      type="text"
+                      name="cardNumber"
+                      className="form-control"
+                      placeholder="1234 5678 9012 3456"
+                      value={formData.cardNumber}
+                      onChange={(e) => {
+                        let val = e.target.value.replace(/\D/g, "");
+                        val = val.slice(0, 16); // allow up to 19 digits
+                        val = val.replace(/(\d{4})(?=\d)/g, "$1 ");
+                        setFormData((prev) => ({ ...prev, cardNumber: val }));
+                      }}
+                      inputMode="numeric"
+                      maxLength="23" // spaces included
+                      required
+                    />
                   </div>
 
-                  {/* QR Code Payment */}
-                  {formData.paymentType === "QRCode" && (
-                    <div className="mb-3 text-center">
-                      <div className="card p-4 bg-light">
-                        <h6 className="fw-bold mb-3">Scan QR Code to Pay</h6>
-                        <div className="d-flex justify-content-center mb-3">
-                          <QRCodeSVG value={upiPaymentString} size={200} />
-                        </div>
-                        <p className="text-muted mb-2">
-                          <strong>Amount:</strong> ₹{totalAmount}
-                        </p>
-                        <p className="text-muted mb-3">
-                          <strong>UPI ID:</strong> {UPI_ID}
-                        </p>
-                      </div>
+                  {/* Expiry + CVV */}
+                  <div className="row">
+                    <div className="col-6 mb-3">
+                      <label className="form-label">Expiry</label>
+                      <input
+                        type="text"
+                        name="expiry"
+                        className="form-control"
+                        placeholder="MM/YY"
+                        value={formData.expiry}
+                        onChange={(e) => {
+                          let val = e.target.value
+                            .replace(/[^0-9/]/g, "")
+                            .slice(0, 5);
+                          if (val.length === 2 && !val.includes("/")) {
+                            val = val + "/";
+                          }
+                          setFormData((prev) => ({ ...prev, expiry: val }));
+                        }}
+                        required
+                      />
                     </div>
-                  )}
-
-                  {/* Card Details */}
-                  {formData.paymentType === "Card" && (
-                    <>
-                      <hr />
-                      <h6 className="fw-bold mb-3">Card Details</h6>
-
-                      {/* Card Number */}
-                      <div className="mb-3">
-                        <label className="form-label">Card Number</label>
-                        <input
-                          type="text"
-                          name="cardNumber"
-                          className="form-control"
-                          placeholder="1234 5678 9012 3456"
-                          value={formData.cardNumber}
-                          onChange={(e) => {
-                            let val = e.target.value.replace(/\D/g, "");
-                            val = val.slice(0, 16); // allow up to 19 digits
-                            val = val.replace(/(\d{4})(?=\d)/g, "$1 ");
-                            setFormData((prev) => ({ ...prev, cardNumber: val }));
-                          }}
-                          inputMode="numeric"
-                          maxLength="23" // spaces included
-                          required
-                        />
-                      </div>
-
-                      {/* Expiry + CVV */}
-                      <div className="row">
-                        <div className="col-6 mb-3">
-                          <label className="form-label">Expiry</label>
-                          <input
-                            type="text"
-                            name="expiry"
-                            className="form-control"
-                            placeholder="MM/YY"
-                            value={formData.expiry}
-                            onChange={(e) => {
-                              let val = e.target.value
-                                .replace(/[^0-9/]/g, "")
-                                .slice(0, 5);
-                              if (val.length === 2 && !val.includes("/")) {
-                                val = val + "/";
-                              }
-                              setFormData((prev) => ({ ...prev, expiry: val }));
-                            }}
-                            required
-                          />
-                        </div>
-                        <div className="col-6 mb-3">
-                          <label className="form-label">CVV</label>
-                          <input
-                            type="password"
-                            name="cvv"
-                            className="form-control"
-                            placeholder="***"
-                            value={formData.cvv}
-                            onChange={(e) => {
-                              const onlyNums = e.target.value
-                                .replace(/\D/g, "")
-                                .slice(0, 4);
-                              setFormData((prev) => ({ ...prev, cvv: onlyNums }));
-                            }}
-                            inputMode="numeric"
-                            maxLength="4"
-                            required
-                          />
-                        </div>
-                      </div>
-                    </>
-                  )}
+                    <div className="col-6 mb-3">
+                      <label className="form-label">CVV</label>
+                      <input
+                        type="password"
+                        name="cvv"
+                        className="form-control"
+                        placeholder="***"
+                        value={formData.cvv}
+                        onChange={(e) => {
+                          const onlyNums = e.target.value
+                            .replace(/\D/g, "")
+                            .slice(0, 4);
+                          setFormData((prev) => ({ ...prev, cvv: onlyNums }));
+                        }}
+                        inputMode="numeric"
+                        maxLength="4"
+                        required
+                      />
+                    </div>
+                  </div>
                 </>
               )}
 
